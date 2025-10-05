@@ -44,7 +44,6 @@ $(document).ready(function () {
 
     // console.log("filterText ", filterText);
 
-
     const filtered = taskData.filter((el) => {
       return (
         el.task.toLowerCase().includes(filterText) ||
@@ -80,4 +79,24 @@ $(document).ready(function () {
 
   fetchTasks();
   startFetching(3600000);
+
+  function readImage($input) {
+    const file = $input[0].files[0];
+
+    // console.log('file ', file);
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $("#imagePreview").attr("src", e.target.result).show();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      $("#imagePreview").hide();
+    }
+  }
+
+  $("#imageInput").on("change", function () {
+    readImage($(this));
+  });
 });
