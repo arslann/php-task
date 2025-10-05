@@ -1,3 +1,15 @@
+# Installation
+- Install the project to XAMPP’s htdocs folder:
+```
+C:\xampp\htdocs\php-task
+```
+- Start Apache using the XAMPP Control Panel
+- Open your browser and go to
+```
+http://localhost/php-task/
+```
+
+#
 Hello dear web portal dev prospect!
 
 This repository is a playground for your submission which should use PHP in the backend and HTML/JS in the frontend.
