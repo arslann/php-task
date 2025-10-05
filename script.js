@@ -1,6 +1,7 @@
-$(document).ready(function () {    
+$(document).ready(function () {
   let fetchInterval;
-  
+  let taskData = [];
+
   const startFetching = (timeInMs) => {
     if (fetchInterval) {
       clearInterval(fetchInterval);
@@ -16,23 +17,9 @@ $(document).ready(function () {
       datatype: "json",
       success: function (res) {
         if (res.success) {
-          $("#tableBody").empty();
+          taskData = res.data ?? [];
 
-          const data = res.data ?? [];
-
-          console.log("data ", data);
-
-          data.forEach((el, i) => {
-            $("#tableBody").append(`
-                    <tr>
-                        <th>${i + 1}</th>
-                        <th>${el.task}</th>
-                        <th>${el.title}</th>
-                        <th>${el.description}</th>
-                        <th style="color: ${el.colorCode}">${el.colorCode}</th>
-                    </tr>    
-                `);
-          });
+          loadTasks(taskData);
         } else {
           Swal.fire({
             title: "Error!",
@@ -51,6 +38,45 @@ $(document).ready(function () {
       },
     });
   };
+
+  const filterTasks = () => {
+    const filterText = $("#filterText").val().toLowerCase().trim();
+
+    // console.log("filterText ", filterText);
+
+
+    const filtered = taskData.filter((el) => {
+      return (
+        el.task.toLowerCase().includes(filterText) ||
+        el.title.toLowerCase().includes(filterText) ||
+        el.description.toLowerCase().includes(filterText)
+      );
+    });
+
+    console.log("filtered ", filtered);
+
+    loadTasks(filtered);
+  };
+
+  const loadTasks = (data) => {
+    $("#tableBody").empty();
+
+    // console.log("data ", data);
+
+    data.forEach((el, i) => {
+      $("#tableBody").append(`
+                    <tr>
+                        <th>${i + 1}</th>
+                        <th>${el.task}</th>
+                        <th>${el.title}</th>
+                        <th>${el.description}</th>
+                        <th style="color: ${el.colorCode}">${el.colorCode}</th>
+                    </tr>    
+                `);
+    });
+  };
+
+  $("#filterTable").click(filterTasks);
 
   fetchTasks();
   startFetching(3600000);
